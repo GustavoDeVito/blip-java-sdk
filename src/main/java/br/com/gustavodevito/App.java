@@ -2,7 +2,7 @@ package br.com.gustavodevito;
 
 import java.io.IOException;
 
-import br.com.gustavodevito.service.ApiService;
+import br.com.gustavodevito.api.ApiService;
 import retrofit2.Retrofit;
 
 public class App {

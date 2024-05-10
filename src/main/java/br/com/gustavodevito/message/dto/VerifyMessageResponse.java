@@ -1,4 +1,4 @@
-package br.com.gustavodevito.dto;
+package br.com.gustavodevito.message.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

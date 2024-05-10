@@ -1,9 +1,9 @@
-package br.com.gustavodevito.repository;
+package br.com.gustavodevito.api;
 
-import br.com.gustavodevito.dto.ListTemplateRequest;
-import br.com.gustavodevito.dto.ListTemplateResponse;
-import br.com.gustavodevito.dto.VerifyMessageRequest;
-import br.com.gustavodevito.dto.VerifyMessageResponse;
+import br.com.gustavodevito.template.dto.ListTemplateRequest;
+import br.com.gustavodevito.template.dto.ListTemplateResponse;
+import br.com.gustavodevito.message.dto.VerifyMessageRequest;
+import br.com.gustavodevito.message.dto.VerifyMessageResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

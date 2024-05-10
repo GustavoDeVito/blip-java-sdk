@@ -1,10 +1,9 @@
-package br.com.gustavodevito.service;
+package br.com.gustavodevito.api;
 
 import java.io.IOException;
 
-import br.com.gustavodevito.dto.ListTemplateRequest;
-import br.com.gustavodevito.dto.VerifyMessageRequest;
-import br.com.gustavodevito.repository.ApiRepository;
+import br.com.gustavodevito.template.dto.ListTemplateRequest;
+import br.com.gustavodevito.message.dto.VerifyMessageRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
