@@ -8,7 +8,14 @@ import retrofit2.Retrofit;
 public class App {
     public static void main(String[] args) throws IOException {
         ApiService apiService = new ApiService(new Retrofit.Builder());
-        // apiService.verifyMessage("83af4900-3825-4b47-b791-14976ee44876");
-        apiService.getTemplates();
+
+        var verifyMessage = apiService.verifyMessage("83af4900-3825-4b47-b791-14976ee44876");
+        System.out.println(verifyMessage.toString());
+
+        var getTemplates = apiService.getTemplates();
+        System.out.println(getTemplates.getLast().toString());
+
+        var getTemplate = apiService.getTemplate("employee_04");
+        System.out.println(getTemplate.toString());
     }
 }

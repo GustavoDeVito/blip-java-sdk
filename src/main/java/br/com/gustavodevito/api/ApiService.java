@@ -1,9 +1,14 @@
 package br.com.gustavodevito.api;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import br.com.gustavodevito.template.dto.ListTemplateRequest;
+import br.com.gustavodevito.template.dto.ListTemplateResponse.DataItem;
 import br.com.gustavodevito.message.dto.VerifyMessageRequest;
+import br.com.gustavodevito.message.dto.VerifyMessageResponse.StatusAudience;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
@@ -38,30 +43,41 @@ public class ApiService {
                 .client(okHttpClient).build();
     }
 
-    public void verifyMessage(String id) throws IOException {
+    public Optional<StatusAudience> verifyMessage(String id) throws IOException {
         var content = VerifyMessageRequest.init(id);
 
         var request = this.retrofit.create(ApiRepository.class).verifyMessage(content).execute();
 
         if (request.isSuccessful()) {
-            System.out.printf("Success Call, Message Status: %s",
-                    request.body().getResource().getItems().getFirst().getStatusAudience().getFirst().getStatus());
+            return Optional.of(request.body().getResource().getItems().getFirst().getStatusAudience().getFirst());
         } else {
-            System.out.printf("Error Call %s", request.errorBody().toString());
+            return Optional.empty();
         }
     }
 
-    public void getTemplates() throws IOException {
+    public List<DataItem> getTemplates() throws IOException {
         var content = ListTemplateRequest.init();
 
         var request = this.retrofit.create(ApiRepository.class).listTemplates(content).execute();
 
         if (request.isSuccessful()) {
-            for (var item : request.body().getResource().getData()) {
-                System.out.printf("Template %s - Status %s \n", item.getName(), item.getStatus());
-            }
+            return request.body().getResource().getData();
         } else {
-            System.out.printf("Error Call %s", request.errorBody().toString());
+            return Collections.emptyList();
+        }
+    }
+
+    public Optional<DataItem> getTemplate(String templateName) throws IOException {
+        var content = ListTemplateRequest.init();
+
+        var request = this.retrofit.create(ApiRepository.class).listTemplates(content).execute();
+
+        if (request.isSuccessful()) {
+            return Optional.of(request.body().getResource().getData().stream()
+                    .filter(item -> item.getName().equals(templateName))
+                    .toList().getFirst());
+        } else {
+            return Optional.empty();
         }
     }
 
