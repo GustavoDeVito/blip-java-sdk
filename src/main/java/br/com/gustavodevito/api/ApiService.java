@@ -1,9 +1,12 @@
 package br.com.gustavodevito.api;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.com.gustavodevito.template.dto.ListTemplateRequest;
 import br.com.gustavodevito.template.dto.ListTemplateResponse.DataItem;
@@ -79,6 +82,67 @@ public class ApiService {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Boolean verifyPhone(String phone) {
+        String regex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$";
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(phone);
+
+        return matcher.matches();
+
+    }
+
+    public Boolean verifyParams(String templateName, List<String> params) throws IOException {
+        var template = getTemplate(templateName);
+
+        if (template.isEmpty()) {
+            return false;
+        }
+
+        var media = params.getFirst();
+
+        var text = new ArrayList<String>(params);
+        
+        var isMedia = !"BODY".equals(template.get().getComponents().getFirst().getType());
+        
+        if (isMedia) {
+            text.removeFirst();
+            var format = template.get().getComponents().getFirst().getFormat();
+
+            if (format.equals("IMAGE")) {
+                String regex = "/([a-z\\-_0-9\\/\\:\\.]*\\.(jpg|jpeg|png|gif))/i";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(media);
+
+                if (!matcher.matches()) {
+                    return false;
+                }
+            } else if (format.equals("DOCUMENT")) {
+                String regex = "/([a-z\\-_0-9\\/\\:\\.]*\\.(pdf))/i";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(media);
+
+                if (!matcher.matches()) {
+                    return false;
+                }
+            } else if (format.equals("VIDEO")) {
+                String regex = "^(https?://)([^\\s]+).(mp4)$";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(media);
+
+                if (!matcher.matches()) {
+                    return false;
+                }
+            }
+        }
+
+        var body = template.get().getComponents().stream().filter(item -> item.getType().equals("BODY")).toList()
+                .getFirst();
+
+        return body.getExample().getBody_text().getFirst().size() == text.size();
+
     }
 
 }

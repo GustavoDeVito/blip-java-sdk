@@ -28,12 +28,28 @@ public class ListTemplateResponse {
     public static class DataItem {
         private String id;
         private String category;
-        private List<Object> components;
+        private List<Component> components;
         private String language;
         private String lastUpdatedTime;
         private String name;
         private String rejectedReason;
         private String status;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class Component {
+        private String type;
+        private String format;
+        private String text;
+        private Example example;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class Example {
+        private List<String> header_handler;
+        private List<List<String>> body_text;
     }
 
     @Data
