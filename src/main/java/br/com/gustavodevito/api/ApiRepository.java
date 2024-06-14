@@ -2,6 +2,8 @@ package br.com.gustavodevito.api;
 
 import br.com.gustavodevito.template.dto.ListTemplateRequest;
 import br.com.gustavodevito.template.dto.ListTemplateResponse;
+import br.com.gustavodevito.message.dto.SendMessageRequest;
+import br.com.gustavodevito.message.dto.SendMessageResponse;
 import br.com.gustavodevito.message.dto.VerifyMessageRequest;
 import br.com.gustavodevito.message.dto.VerifyMessageResponse;
 import retrofit2.Call;
@@ -15,5 +17,8 @@ public interface ApiRepository {
 
     @POST("/commands")
     Call<ListTemplateResponse> listTemplates(@Body ListTemplateRequest listTemplateRequest);
+
+    @POST("/commands")
+    Call<SendMessageResponse> sendMessage(@Body SendMessageRequest sendMessageRequest);
 
 }
